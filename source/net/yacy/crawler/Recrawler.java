@@ -134,9 +134,9 @@ public class Recrawler {
 	                if (sl != null) {
 	                	log.info("RECRWALER addToCrawler: failed to add " + url.toNormalform(true) + ": " + sl);
 	                	final String sr;
-	                	sr = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.LOCAL, request, profile_remote, sb.robots);
+	                	sr = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.REMOTE, request, profile_remote, sb.robots);
 	                	if (sr != null) {
-	                		log.info("RECRWALER addToCrawler: failed to add " + url.toNormalform(true) + ": " + sl);
+	                		log.info("RECRWALER addToremoteCrawler: failed to add " + url.toNormalform(true) + ": " + sl);
 	                   	}
 	                	//sb.index.fulltext().remove(url.hash()); // If adding URL fails, delete it from index
 	                } else {
