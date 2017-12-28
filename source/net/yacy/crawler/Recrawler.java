@@ -43,7 +43,7 @@ import net.yacy.cora.date.ISO8601Formatter;
 public class Recrawler {
 
 	// statics
-	public static final ConcurrentLog log = new ConcurrentLog("YACY");
+	public static final ConcurrentLog log = new ConcurrentLog(Recrawler.class.getName());
 	/** pseudo-random key derived from a time-interval while YaCy startup */
 	public static long speedKey = 0;
 	Switchboard sb;
@@ -72,18 +72,18 @@ public class Recrawler {
 	public final void AddToQueue() {
 		
 		final CrawlQueues cq = sb.crawlQueues;
-		// check if queue is not too full, 500 is a fair limit
-		if (cq.coreCrawlJobSize() > 500) {
-			log.info("RECRWALER: not adding URLs, queue size " + cq.coreCrawlJobSize() +" > 500" );
+		int maxqueuesize = sb.getConfigInt(SwitchboardConstants.RECRAWLER_MAX_QUEUE_SIZE, 500);
+		if (cq.coreCrawlJobSize() > maxqueuesize) {
+			log.info("start condition not met, queue size too big " + cq.coreCrawlJobSize() + " > " + maxqueuesize + " can be changed in config: (" + SwitchboardConstants.RECRAWLER_MAX_QUEUE_SIZE +")");
 			return;
 		}
-		log.info("RECRWALER: will adding URLs, queue size < 500: " + cq.coreCrawlJobSize() +" > 500");
+		log.info("start condition OK, queue size " + cq.coreCrawlJobSize() + " < " + maxqueuesize + " can be changed in config: (" + SwitchboardConstants.RECRAWLER_MAX_QUEUE_SIZE +")");
 		
 		sb.index.fulltext().commit(true);
 		log.info("RECRWALER starting cycle to add URLs to be recrawled");
-		//String rows = "50"; // number of lines to be fetched
+		
 		String rows = sb.getConfig(SwitchboardConstants.RECRAWLER_ROWS, "1000");
-		ConcurrentLog.info(Recrawler.class.getName(), "Rows to fetch in one cycle: " + rows + " (" + SwitchboardConstants.RECRAWLER_ROWS +")");
+		log.info("Rows to fetch in one cycle: " + rows + " can be changed in config: (" + SwitchboardConstants.RECRAWLER_ROWS +")");
 		String days = "365"; // URLs last load > x days
 		String dateQuery = String.format("fresh_date_dt:[* TO NOW/DAY-30DAY] AND load_date_dt:[* TO NOW/DAY-%sDAY]",
 				days, days); // URLs which have a fresh date > 30 days and were loaded > x days ago
@@ -91,7 +91,7 @@ public class Recrawler {
 		final SolrQuery query = new SolrQuery();
 		query.setQuery(dateQuery);
 
-		query.setFields("sku, httpstatus_i");
+		query.setFields("sku");
 		query.add("rows", rows);
 		query.addSort("load_date_dt", SolrQuery.ORDER.asc);
 
@@ -100,7 +100,7 @@ public class Recrawler {
 			
 			QueryResponse resp = sb.index.fulltext().getDefaultConnector().getResponseByParams(query);
 			//log.info("RECRWALER RESPONSE:" + resp.toString());
-			ConcurrentLog.info(Recrawler.class.getName(), "RECRWALER got " + query.getRows() + " rows from query");
+			log.info("RECRWALER got " + query.getRows() + " rows from query");
 			//ConcurrentLog.info(Recrawler.class.getName(), "RECRWALER RESPONSE:" + resp.toString());
 
 			final CrawlProfile profile = sb.crawler.defaultTextSnippetGlobalProfile;

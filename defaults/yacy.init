@@ -1331,3 +1331,9 @@ decoration.grafics.linkstructure = true
 decoration.hostanalysis = false
 decoration.simpleheadernavbar = navbar-default
 
+#Automatic recrawling settings (net.yacy.crawler.Recrawler)
+
+# rows to fetch per cycle
+100_recrawler_rows = 1500
+# max queuesize 
+100_recrawler_max_queue_size = 500
