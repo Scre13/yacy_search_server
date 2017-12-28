@@ -103,20 +103,15 @@ public class Recrawler {
 			
 			//ConcurrentLog.info(Recrawler.class.getName(), "RECRWALER RESPONSE:" + resp.toString());
 
-			CrawlProfile profile;
-			
-			
+			final CrawlProfile profile_remote = sb.crawler.defaultRemoteProfile;
+			final CrawlProfile profile_local = sb.crawler.defaultTextSnippetGlobalProfile;
 			
 			int added = 0;
 			Date now = new Date();
 			
 			for (SolrDocument doc : resp.getResults()) {
 
-				if (added % 2 == 0) {
-					profile = sb.crawler.defaultRemoteProfile;
-				} else {
-					profile = sb.crawler.defaultTextSnippetGlobalProfile;
-				}
+				
 				
 				DigestURL url;
 				if (doc.getFieldValue("sku") != null) {
@@ -125,19 +120,24 @@ public class Recrawler {
 										
 					url = new DigestURL(u);
 					final Request request = sb.loader.request(url, true, true);
-	                String acceptedError = sb.crawlStacker.checkAcceptanceChangeable(url, profile, 0);
+	                String acceptedError = sb.crawlStacker.checkAcceptanceChangeable(url, profile_local, 0);
 	                if (acceptedError == null) { // skip check if failed docs to be included
-	                    acceptedError = sb.crawlStacker.checkAcceptanceInitially(url, profile);
+	                    acceptedError = sb.crawlStacker.checkAcceptanceInitially(url, profile_local);
 	                }
 	                if (acceptedError != null) {
 	                	log.info("RECRWALER addToCrawler: cannot load " + url.toNormalform(true) + ": " + acceptedError);
 	                    continue;
 	                }
-	                final String s;
-	                s = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.LOCAL, request, profile, sb.robots);
+	                final String sl;
+	                sl = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.LOCAL, request, profile_local, sb.robots);
 
-	                if (s != null) {
-	                	log.info("RECRWALER addToCrawler: failed to add " + url.toNormalform(true) + ": " + s);
+	                if (sl != null) {
+	                	log.info("RECRWALER addToCrawler: failed to add " + url.toNormalform(true) + ": " + sl);
+	                	final String sr;
+	                	sr = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.LOCAL, request, profile_remote, sb.robots);
+	                	if (sr != null) {
+	                		log.info("RECRWALER addToCrawler: failed to add " + url.toNormalform(true) + ": " + sl);
+	                   	}
 	                	//sb.index.fulltext().remove(url.hash()); // If adding URL fails, delete it from index
 	                } else {
 	                    added++;
