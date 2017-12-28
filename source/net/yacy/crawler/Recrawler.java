@@ -31,8 +31,6 @@ import net.yacy.crawler.data.CrawlProfile;
 import net.yacy.crawler.retrieval.Request;
 import net.yacy.crawler.data.NoticedURL;
 import net.yacy.search.Switchboard;
-import net.yacy.search.SwitchboardConstants;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
