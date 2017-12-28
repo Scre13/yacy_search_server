@@ -79,7 +79,6 @@ public class Recrawler {
 		}
 		log.info("start condition OK, queue size " + cq.coreCrawlJobSize() + " < " + maxqueuesize + " can be changed in config: (" + SwitchboardConstants.RECRAWLER_MAX_QUEUE_SIZE +")");
 		
-		sb.index.fulltext().commit(true);
 		log.info("RECRWALER starting cycle to add URLs to be recrawled");
 		
 		String rows = sb.getConfig(SwitchboardConstants.RECRAWLER_ROWS, "1000");
@@ -101,6 +100,7 @@ public class Recrawler {
 			QueryResponse resp = sb.index.fulltext().getDefaultConnector().getResponseByParams(query);
 			//log.info("RECRWALER RESPONSE:" + resp.toString());
 			log.info("RECRWALER got " + query.getRows() + " rows from query");
+			
 			//ConcurrentLog.info(Recrawler.class.getName(), "RECRWALER RESPONSE:" + resp.toString());
 
 			final CrawlProfile profile = sb.crawler.defaultTextSnippetGlobalProfile;
@@ -114,13 +114,7 @@ public class Recrawler {
 				if (doc.getFieldValue("sku") != null) {
 
 					final String u = doc.getFieldValue("sku").toString();
-					if (doc.getFieldValue("httpstatus_i") != null) {
-						//log.info("RECRWALER ADD: " + u + "with status: " + doc.getFieldValue("httpstatus_i").toString() );
-					} else {
-						log.info("RECRWALER ADD: " + u + "with status: NOSTATUS");
-					}
-					
-					
+										
 					url = new DigestURL(u);
 					final Request request = sb.loader.request(url, true, true);
 	                String acceptedError = sb.crawlStacker.checkAcceptanceChangeable(url, profile, 0);
@@ -136,7 +130,7 @@ public class Recrawler {
 
 	                if (s != null) {
 	                	log.info("RECRWALER addToCrawler: failed to add " + url.toNormalform(true) + ": " + s);
-	                	sb.index.fulltext().remove(url.hash()); // If adding URL fails, delete it from index
+	                	//sb.index.fulltext().remove(url.hash()); // If adding URL fails, delete it from index
 	                } else {
 	                    added++;
 	                    
@@ -144,9 +138,9 @@ public class Recrawler {
 				} else {
 
 				}
-				sb.index.fulltext().commit(true);
 			}
 			//log.info("RECRWALER ADDED " + added + " URLs with timestamp: " + ISO8601Formatter.FORMATTER.format(now));
+			query.clear();
 			ConcurrentLog.info(Recrawler.class.getName(), "RECRWALER ADDED " + added + " URLs with timestamp: " + ISO8601Formatter.FORMATTER.format(now));
 		} catch (SolrException e) {
 			e.printStackTrace();
