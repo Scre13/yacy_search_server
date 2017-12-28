@@ -95,7 +95,8 @@ public class Recrawler {
 		try {
 			
 			QueryResponse resp = sb.index.fulltext().getDefaultConnector().getResponseByParams(query);
-			log.info("RECRWALER RESPONSE:" + resp.toString());
+			//log.info("RECRWALER RESPONSE:" + resp.toString());
+			ConcurrentLog.info(Recrawler.class.getName(), "RECRWALER RESPONSE:" + resp.toString());
 
 			final CrawlProfile profile = sb.crawler.defaultTextSnippetGlobalProfile;
 			
@@ -140,7 +141,8 @@ public class Recrawler {
 				}
 				sb.index.fulltext().commit(true);
 			}
-			log.info("RECRWALER ADDED " + added + " URLs with timestamp: " + ISO8601Formatter.FORMATTER.format(now));
+			//log.info("RECRWALER ADDED " + added + " URLs with timestamp: " + ISO8601Formatter.FORMATTER.format(now));
+			ConcurrentLog.info(Recrawler.class.getName(), "RECRWALER ADDED " + added + " URLs with timestamp: " + ISO8601Formatter.FORMATTER.format(now));
 		} catch (SolrException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
