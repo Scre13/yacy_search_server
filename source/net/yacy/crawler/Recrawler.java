@@ -103,13 +103,21 @@ public class Recrawler {
 			
 			//ConcurrentLog.info(Recrawler.class.getName(), "RECRWALER RESPONSE:" + resp.toString());
 
-			final CrawlProfile profile = sb.crawler.defaultTextSnippetGlobalProfile;
+			CrawlProfile profile;
+			
+			
 			
 			int added = 0;
 			Date now = new Date();
 			
 			for (SolrDocument doc : resp.getResults()) {
 
+				if (added % 2 == 0) {
+					profile = sb.crawler.defaultRemoteProfile;
+				} else {
+					profile = sb.crawler.defaultTextSnippetGlobalProfile;
+				}
+				
 				DigestURL url;
 				if (doc.getFieldValue("sku") != null) {
 
