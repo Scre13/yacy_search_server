@@ -534,6 +534,13 @@ public final class SwitchboardConstants {
     public static final String NETWORK_BOOTSTRAP_SEEDLIST_STUB = "network.unit.bootstrap.seedlist";
 
     public static final String NETWORK_SEARCHVERIFY = "network.unit.inspection.searchverify";
+    
+    /** Key of the setting controlling whether https should be preferred for in-protocol operations when available on remote peers.
+     * A distinct general setting is available to control whether https sould be used for remote search queries : see {@link #REMOTESEARCH_HTTPS_PREFERRED} */
+    public static final String NETWORK_PROTOCOL_HTTPS_PREFERRED = "network.unit.protocol.https.preferred";
+    
+    /** Default setting value controlling whether https should be preferred for in-protocol operations when available on remote peers */
+    public static final boolean NETWORK_PROTOCOL_HTTPS_PREFERRED_DEFAULT = false;
 
     /**
      * appearance
@@ -566,6 +573,16 @@ public final class SwitchboardConstants {
     public static final String SEARCH_TARGET_SPECIAL_PATTERN  = "search.target.special.pattern"; // ie 'own' addresses in topframe, 'other' in iframe
     public static final String SEARCH_VERIFY  = "search.verify";
     public static final String SEARCH_VERIFY_DELETE = "search.verify.delete";
+    
+	/**
+	 * Key of the setting controlling whether content domain filtering is strict :
+	 * when false, results can be extended to documents including links to documents
+	 * of contentdom type, whithout being themselves of that type.
+	 */
+    public static final String SEARCH_STRICT_CONTENT_DOM = "search.strictContentDom";
+    
+	/** Default setting value controlling whether content domain filtering is strict. */
+    public static final boolean SEARCH_STRICT_CONTENT_DOM_DEFAULT = false;
     
     /** Key of the setting controlling whether search results resorting by browser JavaScript is enabled */
     public static final String SEARCH_JS_RESORT = "search.jsresort";

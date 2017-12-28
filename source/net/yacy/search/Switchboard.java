@@ -1,4 +1,4 @@
-// plasmaSwitchboard.java
+// Switchboard.java
 // (C) 2004-2007 by Michael Peter Christen; mc@yacy.net, Frankfurt a. M., Germany
 // first published 2004 on http://yacy.net
 //
@@ -631,12 +631,7 @@ public final class Switchboard extends serverSwitch {
         //final long startedSeedListAquisition = System.currentTimeMillis();
 
         // init a DHT transmission dispatcher
-        this.dhtDispatcher =
-            (this.peers.sizeConnected() == 0) ? null : new Dispatcher(
-                this.index,
-                this.peers,
-                true,
-                10000);
+		this.dhtDispatcher = (this.peers.sizeConnected() == 0) ? null : new Dispatcher(this, true, 10000);
 
         // set up local robots.txt
         this.robotstxtConfig = RobotsTxtConfig.init(this);
@@ -1500,12 +1495,7 @@ public final class Switchboard extends serverSwitch {
             this.crawler = new CrawlSwitchboard(this);
 
             // init a DHT transmission dispatcher
-            this.dhtDispatcher =
-                (this.peers.sizeConnected() == 0) ? null : new Dispatcher(
-                    this.index,
-                    this.peers,
-                    true,
-                    10000);
+			this.dhtDispatcher = (this.peers.sizeConnected() == 0) ? null : new Dispatcher(this, true, 10000);
 
             // create new web structure
             this.webStructure = new WebStructureGraph(new File(this.queuesRoot, "webStructure.map"));
@@ -3707,15 +3697,9 @@ public final class Switchboard extends serverSwitch {
         @Override
         public void run() {
             final long t = System.currentTimeMillis();
-            final Map<String, String> response =
-                Protocol.crawlReceipt(
-                    Switchboard.this.peers.mySeed(),
-                    this.initiatorPeer,
-                    "crawl",
-                    "fill",
-                    "indexed",
-                    this.reference,
-                    "");
+			final Map<String, String> response = Protocol.crawlReceipt(Switchboard.this,
+					Switchboard.this.peers.mySeed(), this.initiatorPeer, "crawl", "fill", "indexed", this.reference,
+					"");
             if ( response == null ) {
                 Switchboard.this.log.info("Sending crawl receipt for '"
                     + this.reference.url().toNormalform(true)
