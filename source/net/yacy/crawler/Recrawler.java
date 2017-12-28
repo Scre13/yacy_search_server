@@ -31,6 +31,8 @@ import net.yacy.crawler.data.CrawlProfile;
 import net.yacy.crawler.retrieval.Request;
 import net.yacy.crawler.data.NoticedURL;
 import net.yacy.search.Switchboard;
+import net.yacy.search.SwitchboardConstants;
+
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -79,7 +81,8 @@ public class Recrawler {
 		
 		sb.index.fulltext().commit(true);
 		log.info("RECRWALER starting cycle to add URLs to be recrawled");
-		String rows = "50"; // number of lines to be fetched
+		//String rows = "50"; // number of lines to be fetched
+		String rows = sb.getConfig("RECRAWLER_ROWS", "1000");
 		String days = "365"; // URLs last load > x days
 		String dateQuery = String.format("fresh_date_dt:[* TO NOW/DAY-30DAY] AND load_date_dt:[* TO NOW/DAY-%sDAY]",
 				days, days); // URLs which have a fresh date > 30 days and were loaded > x days ago

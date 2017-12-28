@@ -177,6 +177,7 @@ public final class SwitchboardConstants {
     public static final String RECRAWLER_LOADPREREQ        = "100_recrawler_loadprereq";
     public static final String RECRAWLER_IDLESLEEP         = "100_recrawler_idlesleep";
     public static final String RECRAWLER_BUSYSLEEP         = "100_recrawler_busysleep";
+    public static final String RECRAWLER_ROWS              = "100_recrawler_rows";
 
     
     /**
