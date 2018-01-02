@@ -130,7 +130,7 @@ public class Recrawler {
 	                }
 	                final String sl;
 	                sb.crawlQueues.removeURL(url.hash());
-	                sb.crawlQueues.clear();
+	                
 	                sl = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.LOCAL, request, profile_local, sb.robots);
 
 	                if (sl != null) {
