@@ -129,7 +129,8 @@ public class Recrawler {
 	                    continue;
 	                }
 	                final String sl;
-	                sl = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.LOCAL, request, profile_local, sb.robots);
+	                sb.crawlQueues.removeURL(url.hash());
+	                sl = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.GLOBAL, request, profile_local, sb.robots);
 
 	                if (sl != null) {
 	                	log.info("RECRWALER addToCrawler: failed to add " + url.toNormalform(true) + ": " + sl);
