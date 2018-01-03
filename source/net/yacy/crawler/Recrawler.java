@@ -119,6 +119,11 @@ public class Recrawler {
 					final String u = doc.getFieldValue("sku").toString();
 										
 					url = new DigestURL(u);
+					sb.index.fulltext().clearCaches();
+					sb.index.fulltext().remove(url.hash());
+					sb.index.fulltext().commit(false);
+					
+					
 					final Request request = sb.loader.request(url, true, true);
 	                String acceptedError = sb.crawlStacker.checkAcceptanceChangeable(url, profile_local, 0);
 	                if (acceptedError == null) { // skip check if failed docs to be included
