@@ -103,7 +103,7 @@ public class Recrawler {
 			
 			//ConcurrentLog.info(Recrawler.class.getName(), "RECRWALER RESPONSE:" + resp.toString());
 
-			final CrawlProfile profile_remote = sb.crawler.defaultRemoteProfile;
+			//final CrawlProfile profile_remote = sb.crawler.defaultRemoteProfile;
 			final CrawlProfile profile_local = sb.crawler.defaultTextSnippetGlobalProfile;
 			
 			int added = 0;
@@ -134,12 +134,12 @@ public class Recrawler {
 	                sl = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.LOCAL, request, profile_local, sb.robots);
 
 	                if (sl != null) {
-	                	log.info("RECRWALER addToCrawler: failed to add " + url.toNormalform(true) + ": " + sl);
-	                	final String sr;
-	                	sr = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.REMOTE, request, profile_remote, sb.robots);
-	                	if (sr != null) {
-	                		log.info("RECRWALER addToremoteCrawler: failed to add " + url.toNormalform(true) + ": " + sl);
-	                   	}
+	                	//log.info("RECRWALER addToCrawler: failed to add " + url.toNormalform(true) + ": " + sl);
+	                	//final String sr;
+	                	//sr = sb.crawlQueues.noticeURL.push(NoticedURL.StackType.REMOTE, request, profile_remote, sb.robots);
+	                	//if (sr != null) {
+	                		//log.info("RECRWALER addToremoteCrawler: failed to add " + url.toNormalform(true) + ": " + sl);
+	                   	//}
 	                	//sb.index.fulltext().remove(url.hash()); // If adding URL fails, delete it from index
 	                } else {
 	                    added++;
@@ -151,7 +151,7 @@ public class Recrawler {
 			}
 			//log.info("RECRWALER ADDED " + added + " URLs with timestamp: " + ISO8601Formatter.FORMATTER.format(now));
 			query.clear();
-			ConcurrentLog.info(Recrawler.class.getName(), "RECRWALER ADDED " + added + " URLs with timestamp: " + ISO8601Formatter.FORMATTER.format(now));
+			log.info("RECRWALER ADDED " + added + " URLs with timestamp: " + ISO8601Formatter.FORMATTER.format(now));
 		} catch (SolrException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
