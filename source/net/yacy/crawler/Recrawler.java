@@ -38,6 +38,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
 import net.yacy.cora.date.ISO8601Formatter;
+import net.yacy.kelondro.util.MemoryControl;
 
 
 public class Recrawler {
@@ -122,6 +123,7 @@ public class Recrawler {
 					sb.index.fulltext().clearCaches();
 					sb.index.fulltext().remove(url.hash());
 					sb.index.fulltext().commit(false);
+
 					
 					
 					final Request request = sb.loader.request(url, true, true);
@@ -162,6 +164,8 @@ public class Recrawler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		net.yacy.kelondro.util.MemoryControl.gc(1000, "running recrawler GC");
 		return;
 	}
 
